@@ -1,3 +1,10 @@
-FROM httpd
+FROM python:3.6
 
-COPY ./htdocs/ /usr/local/apache2/htdocs/
+RUN mkdir /site
+WORKDIR /site
+
+COPY ./htdocs/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+COPY ./htdocs .

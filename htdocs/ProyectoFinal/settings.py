@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'jtnwb)m+7bj7g*9z0((1i8!quf^acnxj0$95%62)aoj3ps+h3a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -91,10 +91,21 @@ WSGI_APPLICATION = 'ProyectoFinal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mydb',
+        'USER': 'myuser',
+        'PASSWORD': 'mypassowrd.',
+        'HOST': 'postgres',
+        'PORT': 5432,
     }
 }
 
@@ -141,11 +152,10 @@ LOGOUT_REDIRECT_URL = "/"
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "assets"),
     os.path.join(BASE_DIR, "frontend/dist"),
 ]
 
-# STATIC_ROOT = "" # The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = os.path.join('/site', 'static')
 
 # Modelo del usuario personalizado
 AUTH_USER_MODEL = "usuarios.Usuario"
@@ -170,7 +180,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 6 # 10 could be a good value to assign in production. Remember: this currently also applies to answers
+    'PAGE_SIZE': 6  # 10 could be a good value to assign in production. Remember: this currently also applies to answers
 }
 
 WEBPACK_LOADER = {
