@@ -60,8 +60,9 @@ Docker CE >= 19
 En una carpeta local que seleccionemos para trabajar, abrir una terminal y hacer git clone de este repositorio
 
 #### Instlar dependencias de VUE y buildear el front para prod
+Entramos a htdocs/frontend y buildeamos con npm:
 ```
-cd vue-django-archetype-prod/frontend
+cd vue-django-archetype-prod/htdocs/frontend
 npm install
 npm run build
 ```
