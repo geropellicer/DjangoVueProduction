@@ -67,6 +67,42 @@ npm install
 npm run build
 ```
 
+
+#### Preparación de certificados SSL:
+Para probar en un servidor local, este contenedor viene con un certificado SSL básico que en producción debe reemplazarse con un certificado real según el dominio que obtengamos. Dichos certificados se deben reemplazar el .crt en la carpeta "nginx/ssl/public" y el .key en la carpeta "nginx/ssl/private".
+
+En caso de que queramos probar localmente en nuestro localhost offline:
+
+Debemos entrar en la carpeta "nginx/ssl" y utilizamos el archivo de configuracion que se encuentra ahí para regenerar el certificado público y el privado:
+````
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -config localhost.conf
+````
+
+Eso nos va a generar dos archivos (uno .key y el otro .crt). Debemos mover estos archivos a las carpetas "nginx/ssl/private" y "nginx/ssl/public" respectivamente, reemplazando el contenido que pudieran tener previamente.
+````
+sudo mv localhost.key ./private/
+sudo mv localhost.crt ./public/
+````
+
+Preparamos nuestro sistema para que confíe en el certificado:
+````
+cd nginx/ssl/public
+sudo apt install libnss3-tools
+certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n "localhost" -i localhost.crt
+````
+
+Cerramos el navegador, rebuildeamos las imagenes con "docker-compose build" habiendo parado todos los contenedores y volver a levantar y a abrir el navegador. Todo debería estar funcionando.
+
+## Nota:
+Lo importante es que, para poder colocar los archivos de certificados SSL de encriptación (público) y decriptación (privado) deben quedar en las carpetas "nginx/ssl/public" y "nginx/ssl/private" respectivamente. Desde ahí el docker-compose.yml se encarga de colocarlos en el contenedor que tiene la imagen nginx en la ubicación correcta.
+
+Para más info:
+- https://www.humankode.com/ssl/create-a-selfsigned-certificate-for-nginx-in-5-minutes
+- https://medium.com/faun/setting-up-ssl-certificates-for-nginx-in-docker-environ-e7eec5ebb418
+
+
+
+
 #### Levantar usando Docker Compose
 Volvemos a la raiz del proyecto:
 ```
@@ -96,40 +132,12 @@ docker-compose up
 ```
 
 
-
-#### Si es necesario regenerar los certificados SSL:
-Para probar en un servidor local, este contenedor viene con un certificado SSL básico que en producción debe reemplazarse con un certificado real según el dominio que obtengamos. Dichos certificados se deben reemplazar el .crt en la carpeta "nginx/ssl/public" y el .key en la carpeta "nginx/ssl/private".
-
-En caso de que queramos probar localmente en nuestro localhost offline:
-
-Debemos entrar en la carpeta "nginx/ssl" y utilizamos el archivo de configuracion que se encuentra ahí para regenerar el certificado público y el privado:
-````
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -config localhost.conf
-````
-
-Eso nos va a generar dos archivos (uno .key y el otro .crt). Debemos mover estos archivos a las carpetas "nginx/ssl/private" y "nginx/ssl/public" respectivamente, reemplazando el contenido que pudieran tener previamente.
-
-Preparamos nuestro sistema para que confíe en el certificado:
-````
-cd nginx/ssl/public
-certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n "localhost" -i localhost.crt
-````
-
-Cerramos el navegador, rebuildeamos las imagenes con "docker-compose build" habiendo parado todos los contenedores y volver a levantar y a abrir el navegador. Todo debería estar funcionando.
-
-## Nota:
-Lo importante es que, para poder colocar los archivos de certificados SSL de encriptación (público) y decriptación (privado) deben quedar en las carpetas "nginx/ssl/public" y "nginx/ssl/private" respectivamente. Desde ahí el docker-compose.yml se encarga de colocarlos en el contenedor que tiene la imagen nginx en la ubicación correcta.
-
-Para más info:
-- https://www.humankode.com/ssl/create-a-selfsigned-certificate-for-nginx-in-5-minutes
-- https://medium.com/faun/setting-up-ssl-certificates-for-nginx-in-docker-environ-e7eec5ebb418
-
-
-
 #### Todo listo
 Ya se puede visitar "localhost" y debería estar todo corriendo.
 
 Los contenedores se puede parar y volver a levantar, o incluso para y borrar, y los cambios deberían persistir en nuestra carpeta de trabajo local.
+
+
 
 #### Consola dentro de los contenedores
 Para ejecutar una consola dentro de un contenedor (que tiene que estar corriendo), debemos obtener el id del contendor haciendo
