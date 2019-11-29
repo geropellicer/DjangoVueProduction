@@ -68,9 +68,19 @@ npm run build
 ```
 
 #### Levantar usando Docker Compose
+Volvemos a la raiz del proyecto:
+```
+cd ../.. 
+```
+
 ```Docker
 docker-compose up
 ```
+El comando up intentará buscar las tres imágenes que tiene que levantar en los contenedores. Si las encuentra, es equivalente a correr "docker container run" por cada contenedor. Si no las encuentra, por ejemplo porque es la primera vez que lo ejecutamos o por que las borramos, hará primero un build de cada imagen y luego un run. 
+Por lo tanto ante cada cambio que hagamos de cualquiera de los tres Dockerfiles o del mismo docker-compose.yml siempre debemos volver a hacer un docker-compose build antes de volver a levantarlo. 
+Si los cambios son solo en el codigo fuente de nuestra app, ubicada en la carpeta "/htdocs", entonces no hace falta rebuildear la imagen. A lo sumo en algunos casos reiniciar los contenedores.
+
+
 Ahí ya deberíamos tener las tres imágenes y la red creada. En caso de que modifiquemos algún Dockerfile o el docker-compose, debemos:
 - Parar los contenedores con 
 ```Docker
