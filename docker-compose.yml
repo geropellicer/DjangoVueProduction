@@ -24,8 +24,11 @@ services:
       - ./htdocs/logs/:/site/logs
       - ./htdocs/static/:/site/static
       - ./htdocs/media:/site/media
+      - ./nginx/ssl/public:/etc/ssl/certs/
+      - ./nginx/ssl/private:/etc/ssl/private/
     ports: 
       - "80:80"
+      - "443:443"
     links:
       - web
     depends_on:
