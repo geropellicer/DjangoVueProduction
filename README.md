@@ -59,6 +59,12 @@ Docker CE >= 19
 #### Clonar el repositorio
 En una carpeta local que seleccionemos para trabajar, abrir una terminal y hacer git clone de este repositorio
 
+#### Instlar dependencias de VUE y buildear el front para prod
+```
+cd vue-django-archetype-prod/frontend
+npm install
+npm run build
+```
 
 #### Levantar usando Docker Compose
 ```Docker
