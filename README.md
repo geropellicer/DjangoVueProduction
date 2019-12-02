@@ -164,6 +164,11 @@ En caso de que se venga desarrollando un proyecto con la versión de local-testi
     - Borrar la base de datos sqlite, ya que se utilizará la de postgres.
 
 
+
+## Nota sobre el login y register
+Son las únicas dos vistas que están hechas con templates de django. Se pueden encontrar en la carpeta templates/registration y templates/django_registration. 
+
+
 ***
 
 ### Versión para local testing:
